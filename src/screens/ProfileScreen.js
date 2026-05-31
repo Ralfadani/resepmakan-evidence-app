@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import Header from '../components/Header';
 import Card from '../components/Card';
-import { getCurrentUser, getFavorites } from '../services/storageService';
+import AppButton from '../components/AppButton';
+import { getCurrentUser, getFavorites, logoutUser } from '../services/storageService';
 import { colors } from '../theme/colors';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
 
@@ -21,13 +22,28 @@ export default function ProfileScreen() {
     loadData();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Header title="Favorit & Profil" subtitle="Data favorit tersimpan menggunakan local storage." />
+      <Header
+        title="Favorit & Profil"
+        subtitle="Data favorit tersimpan menggunakan local storage."
+      />
 
       <Card>
         <View style={styles.profileRow}>
-          <Text style={styles.avatar}>{user?.username?.charAt(0)?.toUpperCase() || 'R'}</Text>
+          <Text style={styles.avatar}>
+            {user?.username?.charAt(0)?.toUpperCase() || 'R'}
+          </Text>
+
           <View>
             <Text style={styles.name}>{user?.username || 'Pengguna'}</Text>
             <Text style={styles.email}>{user?.email || '-'}</Text>
@@ -35,18 +51,28 @@ export default function ProfileScreen() {
         </View>
       </Card>
 
+      <AppButton
+        title="Logout"
+        onPress={handleLogout}
+        variant="secondary"
+      />
+
       <Card>
         <Text style={styles.sectionTitle}>Bukti Persistence</Text>
         <Text style={styles.text}>Storage Key: RESEPMAKAN_FAVORITES</Text>
         <Text style={styles.text}>Jumlah resep favorit: {favorites.length}</Text>
-        <Text style={styles.text}>Data favorit ditampilkan kembali dari AsyncStorage.</Text>
+        <Text style={styles.text}>
+          Data favorit ditampilkan kembali dari AsyncStorage.
+        </Text>
       </Card>
 
       <Text style={styles.listTitle}>Resep Favorit</Text>
 
       {favorites.length === 0 ? (
         <Card>
-          <Text style={styles.text}>Belum ada resep favorit. Buka detail resep lalu tekan Simpan ke Favorit.</Text>
+          <Text style={styles.text}>
+            Belum ada resep favorit. Buka detail resep lalu tekan Simpan ke Favorit.
+          </Text>
         </Card>
       ) : (
         favorites.map(recipe => (

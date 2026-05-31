@@ -64,6 +64,10 @@ export async function getCurrentUser() {
   return getJson(STORAGE_KEYS.CURRENT_USER, null);
 }
 
+export async function logoutUser() {
+  await AsyncStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+}
+
 export async function getFavorites() {
   return getJson(STORAGE_KEYS.FAVORITES, []);
 }
