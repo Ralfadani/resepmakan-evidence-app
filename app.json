@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "ResepMakan Evidence",
+    "slug": "resepmakan-evidence-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-notifications"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.muhamadrizki.resepmakanevidence"
+    },
+    "android": {
+      "package": "com.muhamadrizki.resepmakanevidence"
+    }
+  }
+}
